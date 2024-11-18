@@ -1,4 +1,6 @@
 import streamlit as st
+# Autor de la aplicación
+st.markdown("**Autor:** Esta app fue elaborada por Joseph Vargas")
 
 # Lista de libros con detalles
 libros = [
