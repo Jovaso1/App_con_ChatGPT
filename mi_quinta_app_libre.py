@@ -1,65 +1,66 @@
 import streamlit as st
-from datetime import datetime, timedelta
 
-# Inicializa una lista para almacenar los cumpleaños
-if 'cumpleaños' not in st.session_state:
-    st.session_state['cumpleaños'] = []
+# Lista de libros con detalles
+libros = [
+    {
+        'titulo': 'Cien años de soledad',
+        'autor': 'Gabriel García Márquez',
+        'genero': 'Realismo Mágico',
+        'anio': 1967,
+        'resumen': 'Una novela que narra la historia de la familia Buendía en el pueblo ficticio de Macondo.',
+        'paginas': 417,
+        'idioma': 'Español'
+    },
+    {
+        'titulo': 'Don Quijote de la Mancha',
+        'autor': 'Miguel de Cervantes',
+        'genero': 'Novela de caballería',
+        'anio': 1605,
+        'resumen': 'Las aventuras de un caballero que decide convertirse en justiciero, acompañado de su fiel escudero Sancho Panza.',
+        'paginas': 1024,
+        'idioma': 'Español'
+    },
+    {
+        'titulo': '1984',
+        'autor': 'George Orwell',
+        'genero': 'Distopía',
+        'anio': 1949,
+        'resumen': 'Una novela que describe un futuro totalitario donde el gobierno controla todos los aspectos de la vida humana.',
+        'paginas': 328,
+        'idioma': 'Inglés'
+    },
+    {
+        'titulo': 'Orgullo y prejuicio',
+        'autor': 'Jane Austen',
+        'genero': 'Romántico',
+        'anio': 1813,
+        'resumen': 'La historia de Elizabeth Bennet y su relación con el aristócrata Darcy, explorando temas como la clase social y el matrimonio.',
+        'paginas': 432,
+        'idioma': 'Inglés'
+    }
+]
 
-# Función para agregar un cumpleaños a la lista
-def agregar_cumpleaños(nombre, fecha):
-    cumpleaños = {'nombre': nombre, 'fecha': fecha}
-    st.session_state['cumpleaños'].append(cumpleaños)
+# Título de la app
+st.title('Biblioteca de Libros')
 
-# Función para encontrar el cumpleaños más próximo
-def obtener_cumpleaños_proximo():
-    hoy = datetime.now()
-    proximos_cumpleaños = []
-    
-    for cumple in st.session_state['cumpleaños']:
-        # Calcula el próximo cumpleaños
-        proximo_cumple = cumple['fecha'].replace(year=hoy.year)
-        
-        # Si el cumpleaños ya pasó este año, lo movemos al próximo
-        if proximo_cumple < hoy:
-            proximo_cumple = proximo_cumple.replace(year=hoy.year + 1)
-        
-        proximos_cumpleaños.append({'nombre': cumple['nombre'], 'fecha': proximo_cumple})
-    
-    # Ordena por la fecha del próximo cumpleaños
-    proximos_cumpleaños.sort(key=lambda x: x['fecha'])
-    
-    return proximos_cumpleaños
-
-# Título y descripción de la app
-st.title('Registro de Cumpleaños')
+# Descripción de la app
 st.markdown("""
-    Esta aplicación te permite registrar cumpleaños y te muestra el próximo cumpleaños.
-    Puedes agregar varios cumpleaños y la aplicación te indicará cuál es el siguiente en el calendario.
+    Esta es una app que te permite explorar una selección de libros.
+    Puedes ver detalles sobre cada libro como el título, autor, género, año de publicación, número de páginas y un pequeño resumen.
 """)
 
-# Formulario para agregar un cumpleaños
-with st.form(key='form_cumpleaños'):
-    nombre = st.text_input("Nombre del Cumpleañero")
-    fecha = st.date_input("Fecha de Cumpleaños", min_value=datetime(1900, 1, 1))
-    submit_button = st.form_submit_button(label="Agregar Cumpleaños")
-    
-    if submit_button:
-        agregar_cumpleaños(nombre, fecha)
-        st.success(f'Cumpleaños de {nombre} agregado correctamente!')
+# Mostrar los libros disponibles en una lista desplegable
+opciones_libros = [libro['titulo'] for libro in libros]
+seleccion = st.selectbox('Selecciona un libro', opciones_libros)
 
-# Mostrar todos los cumpleaños registrados
-if st.session_state['cumpleaños']:
-    st.subheader('Cumpleaños registrados:')
-    for cumple in st.session_state['cumpleaños']:
-        st.write(f"{cumple['nombre']} - {cumple['fecha']}")
+# Buscar el libro seleccionado
+libro_seleccionado = next(libro for libro in libros if libro['titulo'] == seleccion)
 
-# Mostrar el cumpleaños más próximo
-if st.session_state['cumpleaños']:
-    proximos_cumpleaños = obtener_cumpleaños_proximo()
-    st.subheader('Próximo Cumpleaños:')
-    
-    if proximos_cumpleaños:
-        proximo = proximos_cumpleaños[0]
-        st.write(f"El próximo cumpleaños es de {proximo['nombre']} el {proximo['fecha'].strftime('%d de %B, %Y')}.")
-    else:
-        st.write("No hay cumpleaños registrados aún.")
+# Mostrar detalles del libro seleccionado
+st.subheader(libro_seleccionado['titulo'])
+st.write(f"**Autor:** {libro_seleccionado['autor']}")
+st.write(f"**Género:** {libro_seleccionado['genero']}")
+st.write(f"**Año de publicación:** {libro_seleccionado['anio']}")
+st.write(f"**Número de páginas:** {libro_seleccionado['paginas']}")
+st.write(f"**Idioma:** {libro_seleccionado['idioma']}")
+st.write(f"**Resumen:** {libro_seleccionado['resumen']}")
