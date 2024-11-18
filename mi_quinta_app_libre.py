@@ -1,113 +1,95 @@
-pip install streamlit
+pip install numpy pygame streamlit
 import streamlit as st
+import pygame
+import numpy as np
 
-# Datos de libros recomendados
-libros = [
-    {
-        'titulo': 'Cien años de soledad',
-        'autor': 'Gabriel García Márquez',
-        'genero': 'Ficción',
-        'duracion': 10,  # Duración estimada de lectura en horas
-        'sinopsis': 'Una obra maestra que cuenta la historia de la familia Buendía en el ficticio pueblo de Macondo.',
-        'imagen': 'https://via.placeholder.com/100x150.png?text=Cien+Años+de+Soledad'
-    },
-    {
-        'titulo': '1984',
-        'autor': 'George Orwell',
-        'genero': 'Ciencia Ficción',
-        'duracion': 8,
-        'sinopsis': 'Una novela distópica que describe un mundo totalitario gobernado por el Partido, bajo la vigilancia constante de Big Brother.',
-        'imagen': 'https://via.placeholder.com/100x150.png?text=1984'
-    },
-    {
-        'titulo': 'La sombra del viento',
-        'autor': 'Carlos Ruiz Zafón',
-        'genero': 'Misterio',
-        'duracion': 12,
-        'sinopsis': 'Un joven descubre un libro olvidado en un cementerio de libros, lo que lo lleva a investigar un misterio relacionado con la historia del autor.',
-        'imagen': 'https://via.placeholder.com/100x150.png?text=La+sombra+del+viento'
-    },
-    {
-        'titulo': 'Sapiens: De animales a dioses',
-        'autor': 'Yuval Noah Harari',
-        'genero': 'No Ficción',
-        'duracion': 15,
-        'sinopsis': 'Un recorrido por la historia de la humanidad, desde la Edad de Piedra hasta la revolución moderna.',
-        'imagen': 'https://via.placeholder.com/100x150.png?text=Sapiens'
-    },
-    {
-        'titulo': 'El principito',
-        'autor': 'Antoine de Saint-Exupéry',
-        'genero': 'Ficción',
-        'duracion': 2,
-        'sinopsis': 'La historia de un niño que viaja por el universo y aprende valiosas lecciones sobre la vida y la amistad.',
-        'imagen': 'https://via.placeholder.com/100x150.png?text=El+principito'
-    },
-    {
-        'titulo': 'El código Da Vinci',
-        'autor': 'Dan Brown',
-        'genero': 'Misterio',
-        'duracion': 8,
-        'sinopsis': 'Un thriller de misterio en el que el profesor Robert Langdon debe resolver un enigma relacionado con el famoso cuadro de Da Vinci.',
-        'imagen': 'https://via.placeholder.com/100x150.png?text=El+codigo+Da+Vinci'
-    },
-    {
-        'titulo': 'Breves respuestas a las grandes preguntas',
-        'autor': 'Stephen Hawking',
-        'genero': 'No Ficción',
-        'duracion': 4,
-        'sinopsis': 'Stephen Hawking explora algunas de las cuestiones más fundamentales sobre el universo, la vida y el futuro.',
-        'imagen': 'https://via.placeholder.com/100x150.png?text=Breves+respuestas'
-    },
-    {
-        'titulo': 'El hobbit',
-        'autor': 'J.R.R. Tolkien',
-        'genero': 'Ficción',
-        'duracion': 7,
-        'sinopsis': 'La aventura de Bilbo Bolsón, un hobbit que se embarca en un viaje inesperado para recuperar un tesoro robado.',
-        'imagen': 'https://via.placeholder.com/100x150.png?text=El+hobbit'
-    }
-]
+# Inicializamos pygame
+pygame.init()
 
-# Función para recomendar libros en base al género y duración de lectura
-def recomendar_libros(genero, duracion):
-    libros_recomendados = []
-    
-    for libro in libros:
-        if libro['genero'] == genero and libro['duracion'] <= duracion:
-            libros_recomendados.append(libro)
-    
-    return libros_recomendados
+# Dimensiones de la pantalla
+SCREEN_WIDTH = 300
+SCREEN_HEIGHT = 600
+BLOCK_SIZE = 30
 
-# Título y descripción de la app
-st.title('Recomendador de Libros')
-st.markdown("""
-    Selecciona un género y una duración de lectura para recibir recomendaciones de libros. 
-    Puedes elegir el tipo de lectura que más te convenga según el tiempo que tengas disponible.
-""")
+# Colores
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
+RED = (255, 0, 0)
 
-# Selección de género de libro
-genero = st.selectbox('Selecciona el género de libro', ['Ficción', 'No Ficción', 'Ciencia Ficción', 'Misterio'])
+# Inicialización de la pantalla
+screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
-# Selección de duración de lectura
-duracion = st.select_slider('Selecciona la duración de lectura (en horas)', 
-                            options=[1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 15],
-                            value=5)
+# Definición de la clase del Tetris
+class Tetris:
+    def __init__(self):
+        self.board = np.zeros((20, 10))  # Tablero de juego vacío
+        self.game_over = False
+        self.current_block = self.new_block()
 
-# Botón para obtener recomendaciones
-if st.button('Obtener Recomendaciones'):
-    libros_recomendados = recomendar_libros(genero, duracion)
-    
-    if libros_recomendados:
-        st.write(f"Libros recomendados para género '{genero}' y duración de lectura de hasta {duracion} horas:")
+    def new_block(self):
+        """Genera un nuevo bloque"""
+        block_type = np.random.choice([1, 2, 3, 4])  # Varias formas de bloques
+        # Definimos una forma de bloque simple (por ejemplo, un bloque en forma de "T")
+        if block_type == 1:
+            return np.array([[1, 1, 1], [0, 1, 0]])
+        elif block_type == 2:
+            return np.array([[1, 1], [1, 1]])
+        elif block_type == 3:
+            return np.array([[1, 1, 0], [0, 1, 1]])
+        elif block_type == 4:
+            return np.array([[0, 1, 1], [1, 1, 0]])
+
+    def move_block(self, direction):
+        """Mueve el bloque"""
+        if direction == 'down':
+            self.current_block[1] += 1  # Mueve el bloque hacia abajo
+        elif direction == 'left':
+            self.current_block[0] -= 1  # Mueve el bloque hacia la izquierda
+        elif direction == 'right':
+            self.current_block[0] += 1  # Mueve el bloque hacia la derecha
+
+    def rotate_block(self):
+        """Rota el bloque"""
+        self.current_block = np.rot90(self.current_block)
+
+    def check_collision(self):
+        """Verifica si el bloque choca con algo"""
+        return False  # Simulamos que no hay colisión para simplificar el ejemplo
+
+    def update(self):
+        """Actualiza el estado del juego"""
+        self.move_block('down')
+
+        if self.check_collision():
+            self.current_block = self.new_block()
+            if self.check_collision():
+                self.game_over = True
+
+
+# Función para dibujar el tablero
+def draw_board(board):
+    for y in range(board.shape[0]):
+        for x in range(board.shape[1]):
+            if board[y, x]:
+                pygame.draw.rect(screen, RED, pygame.Rect(x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE))
+
+
+# Inicializamos el juego
+game = Tetris()
+
+# Función para jugar
+def play_game():
+    while not game.game_over:
+        game.update()
+        screen.fill(BLACK)  # Limpiamos la pantalla
+        draw_board(game.board)  # Dibujamos el tablero
+
+        # Mostrar el estado actual
+        st.image(pygame.surfarray.array3d(screen), caption="Estado del Juego")
         
-        # Mostrar libros recomendados
-        for libro in libros_recomendados:
-            st.image(libro['imagen'], width=100)
-            st.subheader(libro['titulo'])
-            st.write(f"**Autor:** {libro['autor']}")
-            st.write(f"**Duración estimada de lectura:** {libro['duracion']} horas")
-            st.write(f"**Sinopsis:** {libro['sinopsis']}")
-            st.write("---")
-    else:
-        st.write("No hay libros recomendados que coincidan con tu selección.")
+        pygame.time.delay(100)  # Controlamos la velocidad de actualización
+
+
+# Iniciar el juego al hacer clic en el botón
+if st.button('Iniciar Juego'):
+    play_game()
