@@ -3,6 +3,9 @@ import streamlit as st
 # Título de la app
 st.title("Convertidor Universal")
 
+# Autor de la aplicación
+st.markdown("**Autor:** Esta app fue elaborada por Joseph Vargas")
+
 # Seleccionar categoría
 categoria = st.selectbox(
     "Selecciona una categoría",
