@@ -97,3 +97,5 @@ valor = st.number_input(f"Introduce el valor para convertir ({tipo_conversion})"
 if st.button("Convertir"):
     resultado = conversiones[categoria][tipo_conversion](valor)
     st.success(f"El resultado de la conversión es: {resultado:.4f}")
+
+#App realizada por Joseph Vargas con chatGPT
