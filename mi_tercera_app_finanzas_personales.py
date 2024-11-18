@@ -5,6 +5,9 @@ from datetime import datetime
 # Título de la app
 st.title("Registro de Finanzas Personales")
 
+# Autor de la aplicación
+st.markdown("**Autor:** Esta app fue elaborada por Joseph Vargas")
+
 # Descripción
 st.markdown(
     """
