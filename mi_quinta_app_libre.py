@@ -1,4 +1,3 @@
-pip install numpy pygame streamlit
 import streamlit as st
 import pygame
 import numpy as np
