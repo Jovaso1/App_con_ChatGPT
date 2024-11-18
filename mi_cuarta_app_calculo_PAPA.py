@@ -44,7 +44,7 @@ with st.form("registro_materias"):
     )
     creditos = st.number_input("Número de créditos", min_value=1, step=1)
     tipologia = st.selectbox(
-        "Tipología de la asignatura", ["Básica", "Disciplinar", "Libre elección", "Otra"]
+        "Tipología de la asignatura", ["Disciplinar optativa", "Disciplinar obligatoria", "Libre elección", "Fundamental obligatoria", "Fundamental optativa"]
     )
     submit = st.form_submit_button("Agregar materia")
 
